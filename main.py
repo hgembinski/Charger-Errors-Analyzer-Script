@@ -1,24 +1,27 @@
 import pandas as pd
 
-# Read in CSV file
+# Read in file
 df = pd.read_csv('error_log_last7.csv')
 
-#error codes to be ommitted
+# Error codes to be ommitted
 l2_codes = ['1','2']
 dcfc_codes = ['1', '2', '62', '63', '64', '74', '188', '302', '303']
 
-# Create function to aggregate codes and remove duplicates
+# Function to aggregate codes and remove duplicates
 def unique_codes(x):
     return ','.join(set(x))
 
+# Function to filter out entries if they are only associated with certain codes
+# Mostly to filter out timeout errors, vehicle errors, etc
 def filter_errors(entry):
     codes = entry['code'].split(',')
+
     if entry['type'] == 'DCFC' and set(codes).issubset(dcfc_codes):
-        print(entry['type'] + ' ' + entry['name'] + ' ' + entry['code'])
         return False
+
     elif set(codes).issubset(dcfc_codes):
-        print(entry['type'] + ' ' + entry['name'] + ' ' + entry['code'])
         return False
+        
     else:
         return True
 
