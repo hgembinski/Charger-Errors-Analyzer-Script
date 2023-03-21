@@ -4,7 +4,7 @@ import pandas as pd
 df = pd.read_csv('error_log_last7.csv')
 
 # Error codes to be ommitted
-l2_codes = ['1','2']
+l2_codes = ['1','2', '4']
 dcfc_codes = ['1', '2', '62', '63', '64', '74', '188', '302', '303']
 
 # Function to aggregate codes and remove duplicates
@@ -21,7 +21,7 @@ def filter_errors(entry):
 
     elif set(codes).issubset(dcfc_codes):
         return False
-        
+
     else:
         return True
 
@@ -31,9 +31,13 @@ aggregate_df = df.groupby('serial').agg({
     'company': 'first',
     'serial': 'first',
     'name': 'first',
-    'code': unique_codes
+    'code': unique_codes,
+    'utcdate': 'last'
 })
 
+aggregate_df = aggregate_df.rename(columns={'utcdate': 'date of last error'})
+
+#use filter function to generate output df
 output_df = aggregate_df[aggregate_df.apply(filter_errors, axis=1)]
 
 # Output aggregated dataframe to CSV file
