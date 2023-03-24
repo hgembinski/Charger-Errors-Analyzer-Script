@@ -24,7 +24,6 @@ def filter_errors(entry):
         return False
     
     elif entry['company'] in omitted_companies:
-        print('yes')
         return False
 
     elif entry['type'] == 'DCFC' and set(codes).issubset(dcfc_codes):
