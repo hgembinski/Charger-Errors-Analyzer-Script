@@ -23,7 +23,8 @@ def filter_errors(entry):
     if entry['serial'] in serials:
         return False
     
-    elif set(entry['company']).issubset(omitted_companies):
+    elif entry['company'] in omitted_companies:
+        print('yes')
         return False
 
     elif entry['type'] == 'DCFC' and set(codes).issubset(dcfc_codes):
